@@ -54,4 +54,53 @@ contract('DecentralizedBank', ([owner, customer]) => {
         })
     })
 
+    describe('Yield Farming Deployment', async () => {
+        it('rewards token for staking', async () => {
+            let result
+            // Check Investor Balance
+            result = await tether.balanceOf(customer)
+            assert.equal(result.toString(), convertUnitToWei('100'), 'Customer mock wallet balance before staking.')
+
+            //check staking for customer
+            await tether.approve(dcb.address, convertUnitToWei('100'), {from: customer})
+            await dcb.depositTokens(convertUnitToWei('100'), {from: customer})
+
+            //Check updated balance of customer
+            result = await tether.balanceOf(customer)
+            assert.equal(result.toString(), convertUnitToWei('0'), 'Customer mock wallet balance before staking.')
+
+            //check central bank balance
+            result = await tether.balanceOf(dcb.address)
+            assert.equal(result.toString(), convertUnitToWei('100'), "DecentralizedBank Mock Balance after staking from customer.")
+
+            //checks if customer is staking
+            result = await dcb.isStaking(customer)
+            assert.equal(result.toString(), 'true', "Checks if isStaking is true")
+
+            //Checks if we can issue tokens from owner
+            await dcb.issueTokens({from: owner})
+
+            //Ensure only the owner can send tokens
+            await dcb.issueTokens({from: customer}).should.be.rejected
+
+            
+            // Unstake Tokens
+            await dcb.withdrawTokens({from: customer})
+
+            // check unstaking balances
+            //Check updated balance of customer
+            result = await tether.balanceOf(customer)
+            assert.equal(result.toString(), convertUnitToWei('100'), 'Customer mock wallet balance after staking.')
+
+            //check central bank balance
+            result = await tether.balanceOf(dcb.address)
+            assert.equal(result.toString(), convertUnitToWei('0'), "DecentralizedBank Mock Balance after staking from customer.")
+
+            //checks if customer is staking
+            result = await dcb.isStaking(customer)
+            assert.equal(result.toString(), 'false', "Checks if isStaking if false")
+
+        })
+    })
+
 })
