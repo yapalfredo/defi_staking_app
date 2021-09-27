@@ -63,6 +63,7 @@ class App extends Component{
         const dcbData = DecentralizedBank.networks[networkId]
         if (dcbData){
             const dcb = new web3.eth.Contract(DecentralizedBank.abi, dcbData.address)
+            this.setState({decentralizedBank: dcb})
             let stakingBalance = await dcb.methods.stakingBalance(this.state.account).call()
             this.setState({stakingBalance: stakingBalance.toString() })
             //console.log(this.state.stakingBalance)
@@ -70,9 +71,24 @@ class App extends Component{
         } else {
             window.alert('Error! DecentralizedBank contract is not deployed | No Network Detected')
         }
-
         this.setState({loading: false})
+    }
 
+    stakeTokens = (amount) => {
+        this.setState({loading: true })
+        this.state.tether.methods.approve(this.state.decentralizedBank._address, amount).send({from: this.state.account}).on('transactionHash', (hash) => {
+          this.state.decentralizedBank.methods.depositTokens(amount).send({from: this.state.account}).on('transactionHash', (hash) => {
+            this.setState({loading:false})
+          })
+        }) 
+      }
+
+    //unstake function
+    unstakeTokens = () => {
+        this.setState({loading: true})
+        this.state.decentralizedBank.methods.withdrawTokens().send({from: this.state.account}).on('transactionHash', hash => {
+            this.setState({loading: false})
+        })
     }
 
     //Constructor
@@ -82,7 +98,7 @@ class App extends Component{
             account: '0x0',
             tether: {},
             rwd: {},
-            DecentralizedBank: {},
+            decentralizedBank: {},
             tetherBalance: '0',
             rwdBalance: '0',
             stakingBalance: '0',
@@ -92,6 +108,18 @@ class App extends Component{
 
     //Our React Codes Goes In Here
     render(){
+        let content
+        if (this.state.loading){
+            content = <p id='loader' className='text-center' style={{margin: '30px', color: '#000066'}}>Loading Please</p>
+        }else {
+            content = <Main tetherBalance={this.state.tetherBalance}
+                            rwdBalance={this.state.rwdBalance} 
+                            stakingBalance={this.state.stakingBalance} 
+                            stakeTokens={this.stakeTokens} 
+                            unstakeTokens={this.unstakeTokens}
+                            />
+        }
+
         return (
            <div>
                <Navbar account={this.state.account}/>
@@ -100,7 +128,7 @@ class App extends Component{
                        <main role='main' className='col-lg-12 ml-auto mr-auto'
                              style={{maxWidth:'600px', minHeight: '100vm'}}>
                             <div>
-                                <Main />
+                               {content}
                             </div>
                        </main>
                    </div>
