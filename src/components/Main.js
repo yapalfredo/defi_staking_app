@@ -8,13 +8,13 @@ class Main extends Component {
             <div id='content' className='mt-3'>
                 <table className='table text-muted text-center'>
                     <thead>
-                        <tr style={{color: '#000066'}}>
+                        <tr style={{color: 'white'}}>
                             <th scope='col'>STAKING BALANCE</th>
                             <th scope='col'>REWARD BALANCE</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr style={{color: '#000066'}}>
+                        <tr style={{color: 'white'}}>
                             <td>{window.web3.utils.fromWei(this.props.stakingBalance, 'Ether')} mUSDT</td>
                             <td>{window.web3.utils.fromWei(this.props.rwdBalance, 'Ether')} RWD</td>
                         </tr>
@@ -29,7 +29,7 @@ class Main extends Component {
                             amount = window.web3.utils.toWei(amount, 'Ether')
                             this.props.stakeTokens(amount)
                         }
-                    } className='mb-3' style={{color: '#000066'}}>
+                    } className='mb-3' >
 
                         <div style={{borderSpacing: '0 1em'}}>
                             <label className='float-left' style={{marginLeft: '15px'}}><strong>Stake Tokens</strong></label>
@@ -50,7 +50,14 @@ class Main extends Component {
                             <button type='submit' className='btn btn-primary btn-lg btn-block'>Deposit</button>
                         </div>
                     </form>
-                    <button type='submit' className='btn btn-primary btn-lg btn-block'>Withdraw</button>
+                    <button 
+                    onClick={
+                        e => {
+                            e.preventDefault()
+                            this.props.unstakeTokens()
+                        }
+                    }
+                    type='submit' className='btn btn-primary btn-lg btn-block'>Withdraw</button>
                     <div className='card-body text-center' style={{color: '#000066'}}>Airdrop</div>
                 </div>
             </div>
