@@ -75,20 +75,20 @@ class App extends Component{
         this.setState({loading: false})
     }
 
-    stakeTokens = (amount) => {
+    stakeTokens = amount => {
         this.setState({loading: true })
-        this.state.tether.methods.approve(this.state.decentralizedBank._address, amount).send({from: this.state.account}).on('transactionHash', (hash) => {
-          this.state.decentralizedBank.methods.depositTokens(amount).send({from: this.state.account}).on('transactionHash', (hash) => {
-            this.setState({loading:false})
+         this.state.tether.methods.approve(this.state.decentralizedBank._address, amount).send({from: this.state.account}).on('transactionHash', (hash) => {
+          this.state.decentralizedBank.methods.depositTokens(amount).send({from: this.state.account}).on('transactionHash',  hash => {
+             this.setState({loading:false})            
           })
-        }) 
+        })
       }
 
     //unstake function
     unstakeTokens = () => {
         this.setState({loading: true})
-        this.state.decentralizedBank.methods.withdrawTokens().send({from: this.state.account}).on('transactionHash', hash => {
-            this.setState({loading: false})
+         this.state.decentralizedBank.methods.withdrawTokens().send({from: this.state.account}).on('transactionHash', hash => {
+             this.setState({loading: false})
         })
     }
 
@@ -106,6 +106,7 @@ class App extends Component{
             loading: true
         }
     }
+
 
     //Our React Codes Goes In Here
     render(){
