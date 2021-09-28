@@ -13,6 +13,25 @@ class Airdrop extends Component{
         this.countDown = this.countDown.bind(this)
     }
 
+    secondsToTime(secs) {
+        let hours, minutes,  seconds
+        hours = Math.floor(secs / (60*60))
+
+        let divisorForMinutes = secs % (60*60)
+        minutes = Math.floor(divisorForMinutes / 60)
+
+        let divisorForSeconds = divisorForMinutes % 60
+        seconds = Math.ceil(divisorForSeconds)
+
+        let obj = {
+            'hours': hours,
+            'minutes': minutes,
+            'seconds': seconds
+        }
+
+        return obj
+    }
+
     render() {
         return (
             <div>
