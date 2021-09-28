@@ -59,7 +59,7 @@ class Main extends Component {
                         }
                     }
                     type='submit' className='btn btn-primary btn-lg btn-block'>Withdraw</button>
-                    <div className='card-body text-center' style={{color: '#000066'}}>Airdrop <Airdrop /></div>
+                    <div className='card-body text-center' style={{color: '#000066'}}>Airdrop <Airdrop stakingBalance={this.props.stakingBalance}/></div>
                 </div>
             </div>
         )
