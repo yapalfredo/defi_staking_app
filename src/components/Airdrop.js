@@ -9,8 +9,20 @@ class Airdrop extends Component{
         super()
         this.state = {time: {}, seconds: 20}
         this.timer = 0
-        // this.startTime = this.startTime.bind(this)
-        // this.countDown = this.countDown.bind(this)
+        // this.startTimer = this.startTimer.bind(this)
+        this.countDown = this.countDown.bind(this)
+    }
+
+    countDown () {
+        //1 - countdown a second at a time
+        let seconds = this.state.seconds - 1
+
+        this.setState({
+            time: this.secondsToTime(seconds),
+            seconds: seconds
+        })
+        //2 - stop counting when we hit zero
+        if (seconds == 0) { clearInterval(this.timer) }
     }
 
     secondsToTime(secs) {
@@ -34,7 +46,7 @@ class Airdrop extends Component{
 
     componentDidMount(){
         let timeLeftVar = this.secondsToTime(this.state.seconds)
-        this.setState = {time: timeLeftVar}
+        this.setState({time: timeLeftVar})
     }
 
     render() {
