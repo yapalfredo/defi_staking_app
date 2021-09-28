@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import tetherImg from '../tether.png'
+import Airdrop from './Airdrop'
 
 class Main extends Component {
     //Our React Codes Goes In Here
@@ -58,7 +59,7 @@ class Main extends Component {
                         }
                     }
                     type='submit' className='btn btn-primary btn-lg btn-block'>Withdraw</button>
-                    <div className='card-body text-center' style={{color: '#000066'}}>Airdrop</div>
+                    <div className='card-body text-center' style={{color: '#000066'}}>Airdrop <Airdrop /></div>
                 </div>
             </div>
         )
